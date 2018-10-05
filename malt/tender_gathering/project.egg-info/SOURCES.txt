@@ -1,0 +1,13 @@
+setup.py
+project.egg-info/PKG-INFO
+project.egg-info/SOURCES.txt
+project.egg-info/dependency_links.txt
+project.egg-info/entry_points.txt
+project.egg-info/top_level.txt
+tender_gathering/__init__.py
+tender_gathering/items.py
+tender_gathering/middlewares.py
+tender_gathering/pipelines.py
+tender_gathering/settings.py
+tender_gathering/spiders/__init__.py
+tender_gathering/spiders/aji_scraper.py
