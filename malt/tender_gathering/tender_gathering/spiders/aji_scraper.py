@@ -77,7 +77,6 @@ class AjiScraperSpider(scrapy.Spider):
         criteria = criteria.split() if not criteria is None else []
         sf = title.split() + description + criteria
         sf = [k.lower() for k in sf]
-        # sf = [unidecode.unidecode(k) for k in sf]
         sf = [k.strip(':') for k in sf]
         sf = [re.sub('<.+>', '', k) for k in sf]
         sf = [re.sub('\.', '', k) for k in sf]
