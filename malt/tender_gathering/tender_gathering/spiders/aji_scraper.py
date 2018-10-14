@@ -4,6 +4,7 @@ from scrapy.http import Request, FormRequest
 import re
 import time
 import datetime
+from datetime import timedelta
 
 class AjiScraperSpider(scrapy.Spider):
     name = 'aji_scraper'
@@ -27,8 +28,13 @@ class AjiScraperSpider(scrapy.Spider):
         yield Request(url= base_url, callback=self.choose_page)
 
     def choose_page(self, response):
-        # To be changed
-        for page in range(1, 4):
+        max_page = response.xpath('//ul[@class="pagination"]/li[last()-1]/a/text()').extract_first()
+        try:
+          max_page = int(max_page)
+        except ValueError:
+          max_page = 100
+
+        for page in range(1, max_page):
           page_url = 'https://mapa.aji-france.com/mapa/marche/?page=' + str(page)
           yield Request(url= page_url, callback=self.action)
 
@@ -41,19 +47,27 @@ class AjiScraperSpider(scrapy.Spider):
           str_tender_date = response.xpath('//span[@class="label label-primary pull-right"]/b/text()').re('\d{2}\/\d{2}\/\d{4}')[i - 1]
           tender_date = datetime.datetime.strptime(str_tender_date, '%d/%m/%Y').date()
           today = datetime.datetime.today().date()
-          if product_type == 'Sorties et voyages' and tender_date == today:
-            tender_url = block.xpath('//div[@id="container-content"]/a/@href')[i - 1].extract()
-            url = 'https://mapa.aji-france.com' + tender_url
-            yield scrapy.Request(url = url, callback=self.parse_details)
-          # elif tender_date < today:
+          day = today.strftime('%A')
+
+          if day != 'Sunday':
+            included_dates = [today - timedelta(days=1)]
+          else:
+            included_dates = [today - timedelta(days=1), today - timedelta(days=2)]
+
+          for iter_date in included_dates:
+            if product_type == 'Sorties et voyages' and tender_date == iter_date:
+              tender_url = block.xpath('//div[@id="container-content"]/a/@href')[i - 1].extract()
+              url = 'https://mapa.aji-france.com' + tender_url
+              yield scrapy.Request(url = url, callback=self.parse_details)
 
     def parse_details(self, response):
         cnt_list = ['grande-bretagne', 'grande bretagne', 'angleterre', 'uk', 'gb', 'albanie', 'andorre', 'armenie', 'autriche', 'azerbaidjan', 'iles des acores', 'belgique', 'bosnie-herzegovine', 'bulgarie', 'croatie', 'chypre', 'republique tcheque', 'danemark', 'estonie', 'finlande', 'macedoine', 'france', 'allemagne', 'gibraltar', 'grece', 'groenland', 'hongrie', 'islande', 'irlande', 'italie', 'lettonie', 'liechtenstein', 'lituanie', 'luxembourg', 'malte', 'moldavie', 'monaco', 'pays-bas', 'norvege', 'portugal', 'roumanie', 'saint-marin', 'slovaquie', 'slovenie', 'espagne', 'suede', 'suisse', 'turquie', 'ukraine', 'royaume-uni', 'vatican', 'serbie', 'pologne', 'bielorussie', 'tirana', 'andorre la vella', 'erevan', 'vienne', 'bakou', 'ponta delgada', 'bruxelles', 'sarajevo', 'sofia', 'zagreb', 'nicosie', 'prague', 'copenhage', 'tallinn', 'helsinki', 'skopje', 'paris', 'berlin', 'gibraltar', 'athenes', 'nuuk', 'budapest', 'reykjavik', 'dublin', 'rome', 'riga', 'vaduz', 'vilnius', 'luxembourg', 'la vallette', 'chisinau', 'monaco', 'amsterdam', 'oslo', 'lisbonne', 'bucarest', 'saint-marin', 'bratislava', 'ljubljana', 'madrid', 'stockholm', 'berne', 'ankara', 'kiev', 'londres', 'vatican', 'belgrade', 'varsovie', 'minsk', 'albanie', 'andorre', 'armenie', 'autriche', 'azerbaidjan', 'iles des a\x8dores', 'belgique', 'bosnie-herzegovine', 'bulgarie', 'croatie', 'chypre', 'republique tcheque', 'danemark', 'estonie', 'finlande', 'macedoine', 'france', 'allemagne', 'gibraltar', 'grece', 'groenland', 'hongrie', 'islande', 'irlande', 'italie', 'lettonie', 'liechtenstein', 'lituanie', 'luxembourg', 'malte', 'moldavie', 'monaco', 'pays-bas', 'norvege', 'portugal', 'roumanie', 'saint-marin', 'slovaquie', 'slovenie', 'espagne', 'suede', 'suisse', 'turquie', 'ukraine', 'royaume-uni', 'vatican', 'serbie', 'pologne', 'bielorussie', 'tirana', 'andorre la vella', 'erevan', 'vienne', 'bakou', 'ponta delgada', 'bruxelles', 'sarajevo', 'sofia', 'zagreb', 'nicosie', 'prague', 'copenhage', 'tallinn', 'helsinki', 'skopje', 'paris', 'berlin', 'gibraltar', 'athenes', 'nuuk', 'budapest', 'reykjavik', 'dublin', 'rome', 'riga', 'vaduz', 'vilnius', 'luxembourg', 'la vallette', 'chisinau', 'monaco', 'amsterdam', 'oslo', 'lisbonne', 'bucarest', 'saint-marin', 'bratislava', 'ljubljana', 'madrid', 'stockholm', 'berne', 'ankara', 'kiev', 'londres', 'vatican', 'belgrade', 'varsovie', 'minsk']
-        dep_list = ['ain', 'aisne', 'allier', 'hautes-alpes', 'alpes-de-haute-provence', 'alpes-maritimes', 'ardeche', 'ardennes', 'ariege', 'aube', 'aude', 'aveyron', 'bouches-du-rhone', 'calvados', 'cantal', 'charente', 'charente-maritime', 'cher', 'correze', 'corse-du-sud', 'haute-corse', 'cote-dor', 'cotes-darmor', 'creuse', 'dordogne', 'doubs', 'drome', 'eure', 'eure-et-loir', 'finistere', 'gard', 'haute-garonne', 'gers', 'gironde', 'herault', 'ile-et-vilaine', 'indre', 'indre-et-loire', 'isere', 'jura', 'landes', 'loir-et-cher', 'loire', 'haute-loire', 'loire-atlantique', 'loiret', 'lot', 'lot-et-garonne', 'lozere', 'maine-et-loire', 'manche', 'marne', 'haute-marne', 'mayenne', 'meurthe-et-moselle', 'meuse', 'morbihan', 'moselle', 'nievre', 'nord', 'oise', 'orne', 'pas-de-calais', 'puy-de-dome', 'pyrenees-atlantiques', 'hautes-pyrenees', 'pyrenees-orientales', 'bas-rhin', 'haut-rhin', 'rhone', 'haute-saone', 'saone-et-loire', 'sarthe', 'savoie', 'haute-savoie', 'paris', 'seine-maritime', 'seine-et-marne', 'yvelines', 'deux-sevres', 'somme', 'tarn', 'tarn-et-garonne', 'var', 'vaucluse', 'vendee', 'vienne', 'haute-vienne', 'vosges', 'yonne', 'territoire-de-belfort', 'essonne', 'hauts-de-seine', 'seine-saint-denis', 'val-de-marne', 'val-doise', 'mayotte', 'guadeloupe', 'guyane', 'martinique', 'reunion']
+        dep_list = ['ain', 'aisne', 'allier', 'hautes-alpes', 'alpes-de-haute-provence', 'alpes-maritimes', 'ardeche', 'ardennes', 'ariege', 'aube', 'aude', 'aveyron', 'bouches-du-rhone', 'calvados', 'cantal', 'charente', 'charente-maritime', 'cher', 'correze', 'corse-du-sud', 'haute-corse', 'cote-dor', 'cotes-darmor', 'creuse', 'dordogne', 'doubs', 'drome', 'eure', 'eure-et-loir', 'finistere', 'gard', 'haute-garonne', 'gers', 'gironde', 'herault', 'ile-et-vilaine', 'indre', 'indre-et-loire', 'isere', 'jura', 'landes', 'loir-et-cher', 'loire', 'haute-loire', 'loire-atlantique', 'loiret', 'lot-et-garonne', 'lozere', 'maine-et-loire', 'manche', 'marne', 'haute-marne', 'mayenne', 'meurthe-et-moselle', 'meuse', 'morbihan', 'moselle', 'nievre', 'nord', 'oise', 'orne', 'pas-de-calais', 'puy-de-dome', 'pyrenees-atlantiques', 'hautes-pyrenees', 'pyrenees-orientales', 'bas-rhin', 'haut-rhin', 'rhone', 'haute-saone', 'saone-et-loire', 'sarthe', 'savoie', 'haute-savoie', 'paris', 'seine-maritime', 'seine-et-marne', 'yvelines', 'deux-sevres', 'somme', 'tarn', 'tarn-et-garonne', 'var', 'vaucluse', 'vendee', 'vienne', 'haute-vienne', 'vosges', 'yonne', 'territoire-de-belfort', 'essonne', 'hauts-de-seine', 'seine-saint-denis', 'val-de-marne', 'val-doise', 'mayotte', 'guadeloupe', 'guyane', 'martinique', 'reunion']
         loc_list = cnt_list + dep_list
         trs_list = ['autocar', 'avion', 'bus', 'aéroport', 'aeroport']
         ppl_list = ['personne', 'personnes', 'élèves', 'élève', 'eleves', 'eleve']
         acc_list = ['accompagnateurs', 'accompagnateur', 'accompagnants', 'accompagnant']
+        slp_list = ['hôtel', 'hotel', 'auberges', 'auberge', 'famille']
 
         all_lists = loc_list + trs_list + ppl_list
 
@@ -86,6 +100,7 @@ class AjiScraperSpider(scrapy.Spider):
         search_fields = sf
         temp_location = []
         temp_transport = []
+        temp_slp = []
         nb_people = 'n.a.'
         nb_acc = 'n.a.'
         if any(word in search_fields for word in all_lists):
@@ -94,6 +109,8 @@ class AjiScraperSpider(scrapy.Spider):
               temp_location.append(word.capitalize())
             if word in trs_list:
               temp_transport.append(word.capitalize())
+            if word in slp_list:
+              temp_slp.append(word.capitalize())
             if word in ppl_list:
               nb_one = search_fields[search_fields.index(word) - 1]
               nb_two = search_fields[search_fields.index(word) + 1]
@@ -118,9 +135,30 @@ class AjiScraperSpider(scrapy.Spider):
                   nb_acc = nb_two
                 except ValueError:
                   pass
-
         location = ', '.join(set(temp_location)) if len(temp_location) > 0 else 'n.a.'
         transport = ', '.join(set(temp_transport)) if len(temp_transport) > 0 else 'n.a.'
+        slp_place = ', '.join(set(temp_slp)) if len(temp_slp) > 0 else 'n.a.'
+
+        journey_date = 'n.a.'
+        lenght_stay = []
+        jf = ' '.join(search_fields)
+
+        lot = re.findall('lot(s)?.?(\d)', jf)
+        try:
+          lot = str(max([int(k) for k in lot]))
+        except ValueError:
+          lot = '1'
+
+        j_str1 = re.findall('(\d{1,2}\w{0,3})\s(janvier|février|fevrier|mars|avril|mai|juin|juillet|août|aout|septembre|octobre|novembre|décembre|decembre)+\s(20\d{2})?', jf)
+        j_str2 = re.findall('(\d{1,2}\w{0,3})\s(au)\s(\d{1,2}\w{0,3})\s(janvier|février|fevrier|mars|avril|mai|juin|juillet|août|aout|septembre|octobre|novembre|décembre|decembre)+\s(20\d{2})?', jf)
+        if len(j_str1) > 0 and len(list(set(j_str1))) % 2 == 0:
+          j_str1 = [i + j for i, j in zip(j_str1[::2], j_str1[1::2])]
+          j_str1 = [list(filter(None, k)) for k in j_str1]
+          j_str1 = list([' '.join(k) for k in j_str1])
+          journey_date = ' / '.join(set(j_str1))
+        elif len(j_str2) > 0:
+          j_str2 = [' '.join(k) for k in j_str2]
+          journey_date = ' / '.join(set(j_str2))
 
         current_url = response.request.url
 
@@ -156,10 +194,14 @@ class AjiScraperSpider(scrapy.Spider):
           'Titres': title,
           'Date de publications': publication,
           'Date d\'expiration': expiry,
+          'Nombre de lots': lot,
           'Lieu': location,
+          'Dates du voyage': journey_date,
           'Transport': transport,
+          'Hébergement': slp_place,
           'Nombre d\'eleves': nb_people,
           'Accompagnateur(s)': nb_acc,
+          'Durée du séjour': lenght_stay,
           'Url': current_url,
           'Nom prospect': prospect_name,
           'Adresse prospect': prospect_address,
@@ -168,7 +210,7 @@ class AjiScraperSpider(scrapy.Spider):
           'Contact': contact_name,
           'Telephone': contact_phone,
           'Courriel': contact_mail,
-          'Test': '',
+          'Test': jf,
         }
 
         yield items
