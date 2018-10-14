@@ -61,15 +61,14 @@ class AjiScraperSpider(scrapy.Spider):
               yield scrapy.Request(url = url, callback=self.parse_details)
 
     def parse_details(self, response):
-        cnt_list = ['grande-bretagne', 'grande bretagne', 'angleterre', 'uk', 'gb', 'albanie', 'andorre', 'armenie', 'autriche', 'azerbaidjan', 'iles des acores', 'belgique', 'bosnie-herzegovine', 'bulgarie', 'croatie', 'chypre', 'republique tcheque', 'danemark', 'estonie', 'finlande', 'macedoine', 'france', 'allemagne', 'gibraltar', 'grece', 'groenland', 'hongrie', 'islande', 'irlande', 'italie', 'lettonie', 'liechtenstein', 'lituanie', 'luxembourg', 'malte', 'moldavie', 'monaco', 'pays-bas', 'norvege', 'portugal', 'roumanie', 'saint-marin', 'slovaquie', 'slovenie', 'espagne', 'suede', 'suisse', 'turquie', 'ukraine', 'royaume-uni', 'vatican', 'serbie', 'pologne', 'bielorussie', 'tirana', 'andorre la vella', 'erevan', 'vienne', 'bakou', 'ponta delgada', 'bruxelles', 'sarajevo', 'sofia', 'zagreb', 'nicosie', 'prague', 'copenhage', 'tallinn', 'helsinki', 'skopje', 'paris', 'berlin', 'gibraltar', 'athenes', 'nuuk', 'budapest', 'reykjavik', 'dublin', 'rome', 'riga', 'vaduz', 'vilnius', 'luxembourg', 'la vallette', 'chisinau', 'monaco', 'amsterdam', 'oslo', 'lisbonne', 'bucarest', 'saint-marin', 'bratislava', 'ljubljana', 'madrid', 'stockholm', 'berne', 'ankara', 'kiev', 'londres', 'vatican', 'belgrade', 'varsovie', 'minsk', 'albanie', 'andorre', 'armenie', 'autriche', 'azerbaidjan', 'iles des a\x8dores', 'belgique', 'bosnie-herzegovine', 'bulgarie', 'croatie', 'chypre', 'republique tcheque', 'danemark', 'estonie', 'finlande', 'macedoine', 'france', 'allemagne', 'gibraltar', 'grece', 'groenland', 'hongrie', 'islande', 'irlande', 'italie', 'lettonie', 'liechtenstein', 'lituanie', 'luxembourg', 'malte', 'moldavie', 'monaco', 'pays-bas', 'norvege', 'portugal', 'roumanie', 'saint-marin', 'slovaquie', 'slovenie', 'espagne', 'suede', 'suisse', 'turquie', 'ukraine', 'royaume-uni', 'vatican', 'serbie', 'pologne', 'bielorussie', 'tirana', 'andorre la vella', 'erevan', 'vienne', 'bakou', 'ponta delgada', 'bruxelles', 'sarajevo', 'sofia', 'zagreb', 'nicosie', 'prague', 'copenhage', 'tallinn', 'helsinki', 'skopje', 'paris', 'berlin', 'gibraltar', 'athenes', 'nuuk', 'budapest', 'reykjavik', 'dublin', 'rome', 'riga', 'vaduz', 'vilnius', 'luxembourg', 'la vallette', 'chisinau', 'monaco', 'amsterdam', 'oslo', 'lisbonne', 'bucarest', 'saint-marin', 'bratislava', 'ljubljana', 'madrid', 'stockholm', 'berne', 'ankara', 'kiev', 'londres', 'vatican', 'belgrade', 'varsovie', 'minsk']
-        dep_list = ['ain', 'aisne', 'allier', 'hautes-alpes', 'alpes-de-haute-provence', 'alpes-maritimes', 'ardeche', 'ardennes', 'ariege', 'aube', 'aude', 'aveyron', 'bouches-du-rhone', 'calvados', 'cantal', 'charente', 'charente-maritime', 'cher', 'correze', 'corse-du-sud', 'haute-corse', 'cote-dor', 'cotes-darmor', 'creuse', 'dordogne', 'doubs', 'drome', 'eure', 'eure-et-loir', 'finistere', 'gard', 'haute-garonne', 'gers', 'gironde', 'herault', 'ile-et-vilaine', 'indre', 'indre-et-loire', 'isere', 'jura', 'landes', 'loir-et-cher', 'loire', 'haute-loire', 'loire-atlantique', 'loiret', 'lot-et-garonne', 'lozere', 'maine-et-loire', 'manche', 'marne', 'haute-marne', 'mayenne', 'meurthe-et-moselle', 'meuse', 'morbihan', 'moselle', 'nievre', 'nord', 'oise', 'orne', 'pas-de-calais', 'puy-de-dome', 'pyrenees-atlantiques', 'hautes-pyrenees', 'pyrenees-orientales', 'bas-rhin', 'haut-rhin', 'rhone', 'haute-saone', 'saone-et-loire', 'sarthe', 'savoie', 'haute-savoie', 'paris', 'seine-maritime', 'seine-et-marne', 'yvelines', 'deux-sevres', 'somme', 'tarn', 'tarn-et-garonne', 'var', 'vaucluse', 'vendee', 'vienne', 'haute-vienne', 'vosges', 'yonne', 'territoire-de-belfort', 'essonne', 'hauts-de-seine', 'seine-saint-denis', 'val-de-marne', 'val-doise', 'mayotte', 'guadeloupe', 'guyane', 'martinique', 'reunion']
-        loc_list = cnt_list + dep_list
+        cnt_list = ['grande-bretagne', 'grande bretagne', 'angleterre', 'uk', 'gb', 'albanie', 'andorre', 'armenie', 'autriche', 'azerbaidjan', 'iles des acores', 'belgique', 'bosnie-herzegovine', 'bulgarie', 'croatie', 'chypre', 'republique tcheque', 'danemark', 'estonie', 'finlande', 'macedoine', 'france', 'allemagne', 'gibraltar', 'grece', 'groenland', 'hongrie', 'islande', 'irlande', 'italie', 'lettonie', 'liechtenstein', 'lituanie', 'luxembourg', 'malte', 'moldavie', 'monaco', 'pays-bas', 'norvege', 'portugal', 'roumanie', 'saint-marin', 'slovaquie', 'slovenie', 'espagne', 'suede', 'suisse', 'turquie', 'ukraine', 'royaume-uni', 'vatican', 'serbie', 'pologne', 'bielorussie', 'tirana', 'andorre la vella', 'erevan', 'vienne', 'bakou', 'ponta delgada', 'bruxelles', 'sarajevo', 'sofia', 'zagreb', 'nicosie', 'prague', 'copenhage', 'tallinn', 'helsinki', 'skopje', 'paris', 'berlin', 'gibraltar', 'athenes', 'nuuk', 'budapest', 'reykjavik', 'dublin', 'rome', 'riga', 'vaduz', 'vilnius', 'luxembourg', 'la vallette', 'chisinau', 'monaco', 'amsterdam', 'oslo', 'lisbonne', 'bucarest', 'saint-marin', 'bratislava', 'ljubljana', 'madrid', 'stockholm', 'berne', 'ankara', 'kiev', 'londres', 'vatican', 'belgrade', 'varsovie', 'minsk', 'albanie', 'andorre', 'armenie', 'autriche', 'azerbaidjan', 'iles des acores', 'belgique', 'bosnie-herzegovine', 'bulgarie', 'croatie', 'chypre', 'republique tcheque', 'danemark', 'estonie', 'finlande', 'macedoine', 'france', 'allemagne', 'gibraltar', 'grece', 'groenland', 'hongrie', 'islande', 'irlande', 'italie', 'lettonie', 'liechtenstein', 'lituanie', 'luxembourg', 'malte', 'moldavie', 'monaco', 'pays-bas', 'norvege', 'portugal', 'roumanie', 'saint-marin', 'slovaquie', 'slovenie', 'espagne', 'suede', 'suisse', 'turquie', 'ukraine', 'royaume-uni', 'vatican', 'serbie', 'pologne', 'bielorussie', 'tirana', 'andorre la vella', 'erevan', 'vienne', 'bakou', 'ponta delgada', 'bruxelles', 'sarajevo', 'sofia', 'zagreb', 'nicosie', 'prague', 'copenhage', 'tallinn', 'helsinki', 'skopje', 'paris', 'berlin', 'gibraltar', 'athenes', 'nuuk', 'budapest', 'reykjavik', 'dublin', 'rome', 'riga', 'vaduz', 'vilnius', 'luxembourg', 'la vallette', 'chisinau', 'monaco', 'amsterdam', 'oslo', 'lisbonne', 'bucarest', 'saint-marin', 'bratislava', 'ljubljana', 'madrid', 'stockholm', 'berne', 'ankara', 'kiev', 'londres', 'vatican', 'belgrade', 'varsovie', 'minsk']
+        dest_list = ['ain', 'aisne', 'allier', 'hautes-alpes', 'alpes-de-haute-provence', 'alpes-maritimes', 'ardeche', 'ardennes', 'ariege', 'aube', 'aude', 'aveyron', 'bouches-du-rhone', 'calvados', 'cantal', 'charente', 'charente-maritime', 'cher', 'correze', 'corse-du-sud', 'haute-corse', 'cote-dor', 'cotes-darmor', 'creuse', 'dordogne', 'doubs', 'drome', 'eure', 'eure-et-loir', 'finistere', 'gard', 'haute-garonne', 'gers', 'gironde', 'herault', 'ile-et-vilaine', 'indre', 'indre-et-loire', 'isere', 'jura', 'landes', 'loir-et-cher', 'loire', 'haute-loire', 'loire-atlantique', 'loiret', 'lot-et-garonne', 'lozere', 'maine-et-loire', 'manche', 'marne', 'haute-marne', 'mayenne', 'meurthe-et-moselle', 'meuse', 'morbihan', 'moselle', 'nievre', 'nord', 'oise', 'orne', 'pas-de-calais', 'puy-de-dome', 'pyrenees-atlantiques', 'hautes-pyrenees', 'pyrenees-orientales', 'bas-rhin', 'haut-rhin', 'rhone', 'haute-saone', 'saone-et-loire', 'sarthe', 'savoie', 'haute-savoie', 'paris', 'seine-maritime', 'seine-et-marne', 'yvelines', 'deux-sevres', 'somme', 'tarn', 'tarn-et-garonne', 'var', 'vaucluse', 'vendee', 'vienne', 'haute-vienne', 'vosges', 'yonne', 'territoire-de-belfort', 'essonne', 'hauts-de-seine', 'seine-saint-denis', 'val-de-marne', 'val-doise', 'mayotte', 'guadeloupe', 'guyane', 'martinique', 'reunion']
         trs_list = ['autocar', 'avion', 'bus', 'aéroport', 'aeroport']
         ppl_list = ['personne', 'personnes', 'élèves', 'élève', 'eleves', 'eleve']
         acc_list = ['accompagnateurs', 'accompagnateur', 'accompagnants', 'accompagnant']
         slp_list = ['hôtel', 'hotel', 'auberges', 'auberge', 'famille']
 
-        all_lists = loc_list + trs_list + ppl_list
+        all_lists = cnt_list + dest_list + trs_list + ppl_list
 
         test = response.xpath('//div[@class="col-sm-7"]/text()').extract_first()
         self.log('******** ' + test + ' *********')
@@ -99,14 +98,17 @@ class AjiScraperSpider(scrapy.Spider):
         sf = [k for k in sf if k]
         search_fields = sf
         temp_location = []
+        temp_destination = []
         temp_transport = []
         temp_slp = []
         nb_people = 'n.a.'
         nb_acc = 'n.a.'
         if any(word in search_fields for word in all_lists):
           for word in search_fields:
-            if word in loc_list:
+            if word in cnt_list:
               temp_location.append(word.capitalize())
+            if word in dest_list:
+              temp_destination.append(word.capitalize())
             if word in trs_list:
               temp_transport.append(word.capitalize())
             if word in slp_list:
@@ -195,8 +197,9 @@ class AjiScraperSpider(scrapy.Spider):
           'Date de publications': publication,
           'Date d\'expiration': expiry,
           'Nombre de lots': lot,
-          'Lieu': location,
+          'Pays': location,
           'Dates du voyage': journey_date,
+          'Ville/Région': destination,
           'Transport': transport,
           'Hébergement': slp_place,
           'Nombre d\'eleves': nb_people,
